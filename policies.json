@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Prior Authorization Medical Policy Rules Database",
+    "last_updated": "2026-03-15",
+    "authority": "Clinical Policy Review Committee"
+  },
+  "policies": {
+    "72148": {
+      "description": "MRI Lumbar Spine without Contrast",
+      "category": "Imaging",
+      "status": "COVERED",
+      "approval_criteria": {
+        "min_physio_days": 10,
+        "max_physio_days": null,
+        "allowed_diagnosis_prefixes": ["M", "S", "G"],
+        "notes": "MRI requires documented failure of at least 10 days of conservative physiotherapy before approval."
+      }
+    },
+    "97110": {
+      "description": "Therapeutic Exercises",
+      "category": "Physical Therapy",
+      "status": "COVERED",
+      "approval_criteria": {
+        "min_physio_days": 5,
+        "max_physio_days": 60,
+        "allowed_diagnosis_prefixes": ["M", "S", "G", "R"],
+        "notes": "Standard physiotherapy exercise plan. Approved for musculoskeletal and pain conditions."
+      }
+    },
+    "97530": {
+      "description": "Therapeutic Activities",
+      "category": "Physical Therapy",
+      "status": "COVERED",
+      "approval_criteria": {
+        "min_physio_days": 5,
+        "max_physio_days": 60,
+        "allowed_diagnosis_prefixes": ["M", "S", "G", "Z"],
+        "notes": "Post-operative and functional rehabilitation activities. Approved for musculoskeletal conditions."
+      }
+    },
+    "99213": {
+      "description": "Office or Outpatient Visit, Established Patient (Level 3)",
+      "category": "Evaluation and Management",
+      "status": "COVERED",
+      "approval_criteria": {
+        "min_physio_days": null,
+        "max_physio_days": null,
+        "allowed_diagnosis_prefixes": [],
+        "notes": "No prior authorization required for standard E&M office visits."
+      }
+    },
+    "27447": {
+      "description": "Total Knee Arthroplasty",
+      "category": "Surgery",
+      "status": "COVERED",
+      "approval_criteria": {
+        "min_physio_days": 30,
+        "max_physio_days": null,
+        "allowed_diagnosis_prefixes": ["M"],
+        "notes": "Total knee replacement requires prior documentation of 30+ days of failed conservative management."
+      }
+    },
+    "00000": {
+      "description": "Unknown / Uncovered Procedure",
+      "category": "Uncovered",
+      "status": "NOT_COVERED",
+      "approval_criteria": {
+        "min_physio_days": null,
+        "max_physio_days": null,
+        "allowed_diagnosis_prefixes": [],
+        "notes": "CPT code not found in policy database. Request denied by default."
+      }
+    }
+  }
+}

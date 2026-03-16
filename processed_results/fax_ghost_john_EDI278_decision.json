@@ -1,0 +1,21 @@
+{
+  "adjudication_timestamp": "2026-03-15T11:35:16.891047",
+  "source_edi_file": "fax_ghost_john_EDI278.txt",
+  "original_fax_file": "fax_ghost_john.pdf",
+  "patient": {
+    "last_name": "GHOST",
+    "first_name": "JOHN",
+    "member_id": "MBR-UNKNOWN99",
+    "diagnosis_code": "J18.9"
+  },
+  "request": {
+    "cpt_code": "99213",
+    "physio_days": 0
+  },
+  "adjudication": {
+    "status": "REJECTED",
+    "stage": "Administrative Validation",
+    "reason_code": "MEMBER_NOT_FOUND",
+    "reason_message": "Administrative Denial: Member ID 'MBR-UNKNOWN99' does not exist in the eligibility database. Authorization cannot be processed for an unrecognized member."
+  }
+}

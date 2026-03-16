@@ -1,0 +1,16 @@
+[theme]
+base = "dark"
+# Primary accent color (Green for 'Force Approve' button)
+primaryColor = "#059669"
+
+# Background color for the main content area
+backgroundColor = "#0f1117"
+
+# Background color for sidebar and widgets 
+secondaryBackgroundColor = "#1e2535"
+
+# Color used for all text
+textColor = "#ffffff"
+
+# Font family
+font = "sans serif"

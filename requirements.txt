@@ -1,0 +1,7 @@
+reportlab
+watchdog
+pdf2image
+pdfplumber
+pytesseract
+spacy
+streamlit

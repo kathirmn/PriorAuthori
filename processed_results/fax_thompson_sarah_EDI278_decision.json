@@ -1,0 +1,22 @@
+{
+    "adjudication_timestamp": "2026-03-15T22:49:03.633765",
+    "source_edi_file": "fax_thompson_sarah_EDI278.txt",
+    "original_fax_file": "fax_thompson_sarah.pdf",
+    "patient": {
+        "last_name": "THOMPSON",
+        "first_name": "SARAH",
+        "member_id": "MBR-4452987",
+        "diagnosis_code": "S83.006A"
+    },
+    "request": {
+        "cpt_code": "97530",
+        "physio_days": 30,
+        "source_evidence": "significant reduction in ROM and quadriceps weakness. Requesting authorization for 30 Days of Physiotherapy"
+    },
+    "adjudication": {
+        "status": "REJECTED",
+        "reason_code": "CRITERIA_MET",
+        "reason_message": "[HUMAN OVERRIDE] from APPROVED to REJECTED - All policy criteria satisfied for CPT '97530' (Therapeutic Activities). Physio days documented: 30. Diagnosis code: S83.006A. Prior authorization granted.",
+        "policy_applied": "Therapeutic Activities"
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "adjudication_timestamp": "2026-03-15T22:18:56.478196",
+  "source_edi_file": "fax_ramirez_john_EDI278.txt",
+  "original_fax_file": "fax_ramirez_john.pdf",
+  "patient": {
+    "last_name": "RAMIREZ",
+    "first_name": "JOHN",
+    "member_id": "MBR-7741023",
+    "diagnosis_code": "M54.5"
+  },
+  "request": {
+    "cpt_code": "97110",
+    "physio_days": 20,
+    "source_evidence": null
+  },
+  "adjudication": {
+    "status": "APPROVED",
+    "reason_code": "CRITERIA_MET",
+    "reason_message": "All policy criteria satisfied for CPT '97110' (Therapeutic Exercises). Physio days documented: 20. Diagnosis code: M54.5. Prior authorization granted.",
+    "policy_applied": "Therapeutic Exercises"
+  }
+}

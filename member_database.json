@@ -1,0 +1,57 @@
+{
+  "_meta": {
+    "description": "Mock Member Eligibility Database",
+    "last_updated": "2026-03-15",
+    "version": "1.0.0"
+  },
+  "members": {
+    "MBR-7741023": {
+      "member_id": "MBR-7741023",
+      "first_name": "John",
+      "last_name": "Ramirez",
+      "date_of_birth": "1978-04-15",
+      "plan": "BlueCross Premier PPO",
+      "group_number": "GRP-001",
+      "status": "Active",
+      "effective_date": "2023-01-01",
+      "term_date": "2099-12-31",
+      "notes": "Active member in good standing."
+    },
+    "MBR-4452987": {
+      "member_id": "MBR-4452987",
+      "first_name": "Sarah",
+      "last_name": "Thompson",
+      "date_of_birth": "1990-09-22",
+      "plan": "Aetna Choice POS II",
+      "group_number": "GRP-002",
+      "status": "Active",
+      "effective_date": "2024-06-01",
+      "term_date": "2099-12-31",
+      "notes": "Active member, post-surgical plan enrolled."
+    },
+    "MBR-9901234": {
+      "member_id": "MBR-9901234",
+      "first_name": "Gerald",
+      "last_name": "Hawkins",
+      "date_of_birth": "1955-11-30",
+      "plan": "Medicare Advantage Plus",
+      "group_number": "GRP-003",
+      "status": "Inactive",
+      "effective_date": "2020-01-01",
+      "term_date": "2099-12-31",
+      "notes": "Member voluntarily disenrolled. Coverage suspended pending re-enrollment."
+    },
+    "MBR-3378561": {
+      "member_id": "MBR-3378561",
+      "first_name": "Priya",
+      "last_name": "Nair",
+      "date_of_birth": "2001-03-08",
+      "plan": "Cigna OAP Network",
+      "group_number": "GRP-004",
+      "status": "Active",
+      "effective_date": "2022-03-01",
+      "term_date": "2025-12-31",
+      "notes": "Coverage term date has passed — commercially expired coverage."
+    }
+  }
+}

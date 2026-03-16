@@ -1,0 +1,21 @@
+{
+  "adjudication_timestamp": "2026-03-15T11:35:16.894358",
+  "source_edi_file": "fax_hawkins_gerald_EDI278.txt",
+  "original_fax_file": "fax_hawkins_gerald.pdf",
+  "patient": {
+    "last_name": "HAWKINS",
+    "first_name": "GERALD",
+    "member_id": "MBR-9901234",
+    "diagnosis_code": "M17.11"
+  },
+  "request": {
+    "cpt_code": "27447",
+    "physio_days": 35
+  },
+  "adjudication": {
+    "status": "REJECTED",
+    "stage": "Administrative Validation",
+    "reason_code": "MEMBER_INACTIVE",
+    "reason_message": "Administrative Denial: Member 'MBR-9901234' (Gerald Hawkins) has a coverage status of 'Inactive'. Only Active members are eligible for prior authorization. Please verify enrollment status."
+  }
+}
