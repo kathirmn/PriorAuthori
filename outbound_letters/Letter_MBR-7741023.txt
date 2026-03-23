@@ -1,0 +1,32 @@
+================================================================================
+           PRIOR AUTHORIZATION DETERMINATION NOTICE
+================================================================================
+
+Date of Determination : 2026-03-24 00:47:43
+Patient Name          : JAMES NGUYEN
+Member / Patient ID   : MBR-7741023
+Requested CPT Code    : 72148
+Policy Applied        : MRI Lumbar Spine without Contrast
+
+--------------------------------------------------------------------------------
+DETERMINATION: REJECTED
+Reason Code   : MISSING_PHYSIO_DAYS
+--------------------------------------------------------------------------------
+
+After careful review, the above request has been REJECTED.
+
+Clinical Rationale:
+  CPT code '72148' (MRI Lumbar Spine without Contrast) requires documentation of at least 10 day(s) of physiotherapy, but no physio days were recorded in the authorization request.
+
+Supporting Clinical Evidence on Record:
+  "UNKNOWN"
+
+--------------------------------------------------------------------------------
+ACTION REQUIRED
+--------------------------------------------------------------------------------
+If you believe this determination is incorrect, you may submit a peer-to-peer review request within 14 calendar days of this notice.
+
+This notice was generated automatically by the AI Adjudication Engine.
+For questions, contact the Prior Authorization department.
+
+================================================================================

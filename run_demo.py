@@ -74,8 +74,12 @@ def main():
     # Step 3 – Launch the Streamlit UI (also non-blocking)
     print("[SYSTEM] Launching Streamlit dashboard...")
     ui_process = subprocess.Popen(
-        [sys.executable, "-m", "streamlit", "run",
-         os.path.join(BASE_DIR, "dashboard.py")],
+        [
+            sys.executable, "-m", "streamlit", "run",
+            os.path.join(BASE_DIR, "dashboard.py"),
+            "--server.headless=true",
+            "--browser.gatherUsageStats=false"
+        ],
         cwd=BASE_DIR,
     )
     print(f"[SYSTEM] ▶  Streamlit running  (PID: {ui_process.pid})")

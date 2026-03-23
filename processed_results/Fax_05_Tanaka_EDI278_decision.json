@@ -1,0 +1,21 @@
+{
+  "adjudication_timestamp": "2026-03-24T00:47:40.155936",
+  "source_edi_file": "Fax_05_Tanaka_EDI278.txt",
+  "original_fax_file": "Fax_05_Tanaka.pdf",
+  "patient": {
+    "last_name": "TANAKA",
+    "first_name": "KEIKO",
+    "member_id": "MBR-3378561",
+    "diagnosis_code": "M79.3"
+  },
+  "request": {
+    "cpt_code": "72148",
+    "physio_days": null
+  },
+  "adjudication": {
+    "status": "REJECTED",
+    "stage": "Administrative Validation",
+    "reason_code": "COVERAGE_TERMINATED",
+    "reason_message": "Administrative Denial: Member 'MBR-3378561' (Priya Nair) coverage terminated on 2025-12-31. Today is 2026-03-24. Authorization cannot be granted for expired coverage."
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "adjudication_timestamp": "2026-03-24T00:47:42.204042",
+  "source_edi_file": "Fax_13_Rivera_EDI278.txt",
+  "original_fax_file": "Fax_13_Rivera.pdf",
+  "patient": {
+    "last_name": "RIVERA",
+    "first_name": "OSCAR",
+    "member_id": "MBR-4452987",
+    "diagnosis_code": "G89.29"
+  },
+  "request": {
+    "cpt_code": "72148",
+    "physio_days": null,
+    "source_evidence": "UNKNOWN"
+  },
+  "adjudication": {
+    "status": "REJECTED",
+    "reason_code": "MISSING_PHYSIO_DAYS",
+    "reason_message": "CPT code '72148' (MRI Lumbar Spine without Contrast) requires documentation of at least 10 day(s) of physiotherapy, but no physio days were recorded in the authorization request.",
+    "policy_applied": "MRI Lumbar Spine without Contrast"
+  }
+}

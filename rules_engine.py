@@ -20,10 +20,14 @@ Usage:
 import os
 import re
 import sys
+import time
 import json
 import logging
 from datetime import datetime
 from glob import glob
+
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 # ─────────────────────────────────────────────────────────────────────────────
 # CONFIG
@@ -400,33 +404,60 @@ def process_edi_file(edi_path: str, policies: dict):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# STEP 6 – WATCHDOG MONITOR
+# ─────────────────────────────────────────────────────────────────────────────
+
+class ValidatedEDIHandler(FileSystemEventHandler):
+    def __init__(self, policies):
+        self.policies = policies
+
+    def on_created(self, event):
+        if not event.is_directory and event.src_path.lower().endswith(".txt"):
+            time.sleep(1) # wait for file to finish writing
+            process_edi_file(event.src_path, self.policies)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # ENTRY POINT
 # ─────────────────────────────────────────────────────────────────────────────
 
 def main():
     policies = load_policies(POLICIES_FILE)
 
-    # If a specific file path is given as argument, process only that file
-    if len(sys.argv) > 1:
-        target = sys.argv[1]
-        if not os.path.isfile(target):
-            log.error(f"File not found: {target}")
-            sys.exit(1)
-        process_edi_file(target, policies)
+    once_mode = "--once" in sys.argv
+    if once_mode or len(sys.argv) > 1 and sys.argv[1] != "--once":
+        # Process existing or specific file
+        target = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] != "--once" else None
+        if target:
+            if not os.path.isfile(target):
+                log.error(f"File not found: {target}")
+                sys.exit(1)
+            process_edi_file(target, policies)
+            return
+        
+        edi_files = sorted(glob(os.path.join(EDI_INPUT_DIR, "*.txt")))
+        if not edi_files:
+            log.warning(f"No .txt EDI files found in {EDI_INPUT_DIR}")
+            return
+        log.info(f"Found {len(edi_files)} EDI file(s) to adjudicate.")
+        for edi_path in edi_files:
+            process_edi_file(edi_path, policies)
+        log.info(f"Done processing all. Results written to: {RESULTS_DIR}")
         return
 
-    # Default: process all .txt (EDI) files in /edi_output
-    edi_files = sorted(glob(os.path.join(EDI_INPUT_DIR, "*.txt")))
-    if not edi_files:
-        log.warning(f"No .txt EDI files found in {EDI_INPUT_DIR}")
-        return
-
-    log.info(f"Found {len(edi_files)} EDI file(s) to adjudicate.")
-    for edi_path in edi_files:
-        process_edi_file(edi_path, policies)
-
-    log.info(f"\nDone. Results written to: {RESULTS_DIR}")
-
+    # Continuous watch mode
+    log.info(f"Starting watchdog monitor on: {EDI_INPUT_DIR}")
+    observer = Observer()
+    observer.schedule(ValidatedEDIHandler(policies), EDI_INPUT_DIR, recursive=False)
+    observer.start()
+    log.info("Rules Engine is running. Waiting for validated requests... (Ctrl+C to stop)")
+    try:
+        while True:
+            time.sleep(2)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()
+    log.info("Rules Engine stopped.")
 
 if __name__ == "__main__":
     main()
