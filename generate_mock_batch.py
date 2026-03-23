@@ -57,21 +57,21 @@ EXTRA_NAMES = [
 DIAGNOSIS_CODES = ["M54.5", "M79.3", "S83.006A", "M17.11", "G89.29", "M47.812"]
 
 APPROVE_NOTES = [
-    "Patient has completed {days} days of conservative physiotherapy with no significant improvement in lumbar pain. "
+    "Patient has completed {days} Days of Physiotherapy with no significant improvement in lumbar pain. "
     "Range of motion remains limited. Requesting MRI Lumbar Spine to rule out disc herniation.",
-    "Documented {days} sessions of physical therapy over the past 8 weeks. Patient reports persistent radiculopathy. "
+    "Documented {days} Days of Physiotherapy over the past 8 weeks. Patient reports persistent radiculopathy. "
     "Clinical examination shows positive straight-leg raise. MRI indicated to guide treatment plan.",
-    "Conservative management including {days} days of PT, NSAIDs, and activity modification has failed to resolve symptoms. "
+    "Conservative management including {days} Days of Physiotherapy, NSAIDs, and activity modification has failed to resolve symptoms. "
     "Patient continues to report significant functional limitations. Advanced imaging requested.",
-    "After {days} days of outpatient physiotherapy, patient shows minimal progress. "
-    "Neurological examination findings warrant further investigation via lumbar MRI.",
+    "After {days} Days of Physiotherapy, patient shows minimal progress. "
+    "Neurological examination findings warrant further investigation via lumbar MRI."
 ]
 
 REJECT_NOTES = [
-    "Patient has completed {days} days of physiotherapy. Requesting MRI Lumbar Spine for evaluation of lower back pain.",
-    "Requesting authorization for lumbar MRI. Patient has had {days} sessions of conservative treatment so far.",
-    "Patient presents with {days} days of physical therapy. Mild improvement noted but requesting imaging for confirmation.",
-    "Initial evaluation after {days} days of conservative care. Patient reports intermittent discomfort. MRI requested.",
+    "Patient has completed {days} Days of Physiotherapy. Requesting MRI Lumbar Spine for evaluation of lower back pain.",
+    "Requesting authorization for lumbar MRI. Patient has had {days} Days of Physiotherapy so far.",
+    "Patient presents with {days} Days of Physiotherapy. Mild improvement noted but requesting imaging for confirmation.",
+    "Initial evaluation after {days} Days of Physiotherapy. Patient reports intermittent discomfort. MRI requested.",
 ]
 
 ADMIN_NOTES = [
@@ -164,13 +164,17 @@ def generate_fax_pdf(filepath: str, *, patient_first: str, patient_last: str,
 # ─────────────────────────────────────────────────────────────────────────────
 
 def main():
-    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mock_faxes_batch")
-    os.makedirs(output_dir, exist_ok=True)
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    accepted_dir = os.path.join(base_dir, "mock_faxes_batch", "accepted")
+    rejected_dir = os.path.join(base_dir, "mock_faxes_batch", "rejected")
+    os.makedirs(accepted_dir, exist_ok=True)
+    os.makedirs(rejected_dir, exist_ok=True)
 
     print("=" * 55)
     print("  MOCK FAX BATCH GENERATOR  –  30 Test PDFs")
     print("=" * 55)
-    print(f"Output: {output_dir}\n")
+    print(f"Accepted Output: {accepted_dir}")
+    print(f"Rejected Output: {rejected_dir}\n")
 
     # Build the batch plan: 15 approve, 9 clinical reject, 6 admin reject
     batch = []
@@ -230,7 +234,10 @@ def main():
     # ── Generate PDFs ──
     for idx, entry in enumerate(batch, start=1):
         filename = f"Fax_{idx:02d}_{entry['last']}.pdf"
-        filepath = os.path.join(output_dir, filename)
+        if entry["path"] == "APPROVE":
+            filepath = os.path.join(accepted_dir, filename)
+        else:
+            filepath = os.path.join(rejected_dir, filename)
 
         generate_fax_pdf(
             filepath,

@@ -50,8 +50,8 @@
       "group_number": "GRP-004",
       "status": "Active",
       "effective_date": "2022-03-01",
-      "term_date": "2025-12-31",
-      "notes": "Coverage term date has passed — commercially expired coverage."
+      "term_date": "2099-12-31",
+      "notes": "Active member in good standing."
     }
   }
 }
