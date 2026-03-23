@@ -11,10 +11,8 @@ Run:
 
 import os
 import io
-import sys
 import json
 import glob
-import subprocess
 from datetime import datetime
 
 import streamlit as st
@@ -535,18 +533,8 @@ with st.sidebar:
 
     st.markdown('<hr class="sidebar-divider">', unsafe_allow_html=True)
 
-    # ── AI Processing Engine Trigger ──
-    st.markdown('<div class="sidebar-section-label">Processing Engine</div>', unsafe_allow_html=True)
-    if st.button("▶️  Run AI Processing Engine", use_container_width=True):
-        with st.spinner("AI Engine processing new documents and generating EDI 278 payload..."):
-            python_exe = sys.executable
-            scripts = ["intake_engine.py", "validation_engine.py", "rules_engine.py"]
-            for script in scripts:
-                script_path = os.path.join(BASE_DIR, script)
-                if os.path.isfile(script_path):
-                    subprocess.run([python_exe, script_path], cwd=BASE_DIR)
-        st.success("Processing Complete")
-        st.toast("AI Processing Engine finished successfully!", icon="✅")
+    # ── Refresh Dashboard ──
+    if st.button("🔄 Refresh Dashboard", use_container_width=True):
         st.rerun()
 
     st.markdown('<hr class="sidebar-divider">', unsafe_allow_html=True)

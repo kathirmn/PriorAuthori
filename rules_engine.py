@@ -28,12 +28,14 @@ from glob import glob
 # ─────────────────────────────────────────────────────────────────────────────
 # CONFIG
 # ─────────────────────────────────────────────────────────────────────────────
-BASE_DIR         = os.path.dirname(os.path.abspath(__file__))
-EDI_INPUT_DIR    = os.path.join(BASE_DIR, "validated_requests")
-RESULTS_DIR      = os.path.join(BASE_DIR, "processed_results")
-POLICIES_FILE    = os.path.join(BASE_DIR, "policies.json")
+BASE_DIR              = os.path.dirname(os.path.abspath(__file__))
+EDI_INPUT_DIR         = os.path.join(BASE_DIR, "validated_requests")
+RESULTS_DIR           = os.path.join(BASE_DIR, "processed_results")
+OUTBOUND_LETTERS_DIR  = os.path.join(BASE_DIR, "outbound_letters")
+POLICIES_FILE         = os.path.join(BASE_DIR, "policies.json")
 
 os.makedirs(RESULTS_DIR, exist_ok=True)
+os.makedirs(OUTBOUND_LETTERS_DIR, exist_ok=True)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -286,6 +288,90 @@ def save_result(payload: dict, edi_filename: str):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# STEP 5 – PROVIDER NOTIFICATION LETTER
+# ─────────────────────────────────────────────────────────────────────────────
+
+def generate_provider_letter(payload: dict) -> str | None:
+    """
+    Generate a professional provider notification letter (.txt) in /outbound_letters.
+    Naming convention: Letter_[PatientID].txt
+    Returns the output path, or None if the decision status is not final.
+    """
+    adj     = payload.get("adjudication", {})
+    status  = adj.get("status", "")
+
+    if status not in ("APPROVED", "REJECTED"):
+        return None
+
+    pat          = payload.get("patient", {})
+    req          = payload.get("request", {})
+    member_id    = pat.get("member_id", "UNKNOWN")
+    first_name   = pat.get("first_name", "")
+    last_name    = pat.get("last_name", "")
+    full_name    = f"{first_name} {last_name}".strip() or "Unknown Patient"
+    cpt_code     = req.get("cpt_code", "N/A")
+    evidence     = req.get("source_evidence") or adj.get("reason_message", "No additional detail available.")
+    reason_code  = adj.get("reason_code", "N/A")
+    reason_msg   = adj.get("reason_message", "No reason provided.")
+    timestamp    = payload.get("adjudication_timestamp", datetime.now().isoformat())
+    policy       = adj.get("policy_applied") or "N/A"
+
+    if status == "APPROVED":
+        outcome_line = "We are pleased to inform you that the above request has been APPROVED."
+        action_line  = (
+            "Authorization has been granted. Please proceed with the service and include "
+            "this reference number in all subsequent claims submissions."
+        )
+    else:
+        outcome_line = "After careful review, the above request has been REJECTED."
+        action_line  = (
+            "If you believe this determination is incorrect, you may submit a peer-to-peer "
+            "review request within 14 calendar days of this notice."
+        )
+
+    letter = f"""================================================================================
+           PRIOR AUTHORIZATION DETERMINATION NOTICE
+================================================================================
+
+Date of Determination : {timestamp[:19].replace('T', ' ')}
+Patient Name          : {full_name}
+Member / Patient ID   : {member_id}
+Requested CPT Code    : {cpt_code}
+Policy Applied        : {policy}
+
+--------------------------------------------------------------------------------
+DETERMINATION: {status}
+Reason Code   : {reason_code}
+--------------------------------------------------------------------------------
+
+{outcome_line}
+
+Clinical Rationale:
+  {reason_msg}
+
+Supporting Clinical Evidence on Record:
+  "{evidence}"
+
+--------------------------------------------------------------------------------
+ACTION REQUIRED
+--------------------------------------------------------------------------------
+{action_line}
+
+This notice was generated automatically by the AI Adjudication Engine.
+For questions, contact the Prior Authorization department.
+
+================================================================================
+"""
+
+    letter_filename = f"Letter_{member_id}.txt"
+    letter_path     = os.path.join(OUTBOUND_LETTERS_DIR, letter_filename)
+    with open(letter_path, "w", encoding="utf-8") as f:
+        f.write(letter)
+
+    return letter_path
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # STEP 5 – ORCHESTRATE
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -294,10 +380,11 @@ def process_edi_file(edi_path: str, policies: dict):
     log.info(f"Adjudicating: {filename}")
 
     try:
-        parsed   = parse_edi_278(edi_path)
-        decision = adjudicate(parsed, policies)
-        payload  = build_result_payload(filename, parsed, decision)
-        out_path = save_result(payload, filename)
+        parsed      = parse_edi_278(edi_path)
+        decision    = adjudicate(parsed, policies)
+        payload     = build_result_payload(filename, parsed, decision)
+        out_path    = save_result(payload, filename)
+        letter_path = generate_provider_letter(payload)
 
         status_icon = "✅" if decision["status"] == "APPROVED" else "❌"
         log.info(
@@ -305,6 +392,8 @@ def process_edi_file(edi_path: str, policies: dict):
             f"→ {os.path.basename(out_path)}"
         )
         log.info(f"     {decision['reason_message']}")
+        if letter_path:
+            log.info(f"  ✉️  Letter generated → {os.path.basename(letter_path)}")
 
     except Exception as exc:
         log.error(f"Failed to adjudicate {filename}: {exc}", exc_info=True)
