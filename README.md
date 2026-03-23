@@ -24,9 +24,19 @@ Our system is built using a modular, end-to-end microservice architecture compos
 - **Functionality**: Reads EDI 278 files from `/validated_requests`. Parses CPT code (from `SV1`) and physiotherapy days (from custom `MSG` segment). Compares them against a local `policies.json` database.
 - **Output**: Structured APPROVED/REJECTED JSON decision payload in `/processed_results`.
 
-### Microservice 3 (UI) → `dashboard.py` *(planned)*
-- **Description**: A Streamlit dashboard for stakeholders.
-- **Functionality**: Visualizes the processing queue, extracted data, and final adjudication decisions in real time.
+### Microservice 3 (UI) → `dashboard.py`
+- **Description**: An Enterprise-grade, Human-in-the-Loop SaaS Streamlit dashboard.
+- **Functionality**: Visualizes the processing queue, AI extracted data, and final adjudication decisions. Features include:
+  - **🩺 Clinical Queue**: Two-column layout displaying Source Evidence (XAI) alongside AI Reasoning.
+  - **📊 Executive Dashboard**: High-level KPIs (Total Requests, RN Hours Saved, STP Rate) and visual adjudication breakdowns.
+  - **⚙️ Queue Controls**: Global sidebar with real-time Search, Status Filtering, Sorting, and a CSV Export module.
+  - **▶️ AI Processing Trigger**: Run the AI background engines (`intake` → `validation` → `rules`) directly from the UI.
+  - **📝 Audit Trail & Timeline**: HIPAA-compliant tracking of initial AI decisions and subsequent human overrides.
+
+## Demo & Utilities
+
+- `run_demo.py`: Bootstraps the live presentation environment. Creates all required directories and launches the Streamlit dashboard. (Note: Folders start empty; processing is triggered manually via the UI).
+- `generate_mock_batch.py`: Generates a batch of 30 mock fax PDFs with a specific data mix (50% Approve, 30% Clinical Reject, 20% Admin Reject) into `/mock_faxes_batch` for live demo testing.
 
 ## Pipeline Flow
 
@@ -46,9 +56,11 @@ Our system is built using a modular, end-to-end microservice architecture compos
 
 ## Directory Structure
 - `/mock_faxes`: Incoming unstructured PDF faxes (monitored by Intake).
+- `/mock_faxes_batch`: Staging area for auto-generated 30-fax demo batches.
 - `/edi_output`: EDI 278 files from Intake (monitored by Validation).
 - `/validated_requests`: Eligibility-cleared EDI files ready for clinical adjudication.
 - `/processed_results`: Final decision JSON payloads (admin denials + clinical decisions).
+- `/outbound_letters`: Generated approval/denial letter outputs.
 
 ## Support Files
 - `policies.json`: CPT-level clinical policy rules database.
